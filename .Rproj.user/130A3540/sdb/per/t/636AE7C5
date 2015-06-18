@@ -1,0 +1,16 @@
+{
+    "contents" : "\n## This function performs initial inversion calculation of a matrix and persistent value storage\n## for input data and returned value so that inversion calculation can be limited\n## to first input or change of input data only. Calculated value of inversion is retrieved if present.\n## It assumes that the input matrix is invertible. It must be run prior to executing\n## the next module \"cacheSolve\", to generate the store and retrieve functions in the list\n\nmakeCacheMatrix  <- function(x){\n        inv <- NULL\n        set <- function(y){\n                x<<-y\n                inv<<-NULL\n        }\n        get <- function() x\n        setinverse <- function(inverse) inv<<-inverse\n        getinverse <- function() inv\n        \n        list(set=set, get=get, setinverse=setinverse,getinverse=getinverse)\n}\n\n## This part of the function retrieves the stored value of the inverted matrix if stored previously\n## If the inverse matrix is already present, it returns it,\n## otherwise it calculates and stores it and then returns it.\n\ncacheSolve <- function(x) {\n        inv <- x$getinverse()\n        if(!is.null(inv)){\n                message(\"getting cached data\")\n                return (inv)\n        }\n        data <- x$get()\n        inv <- solve(data)\n        x$setinverse(inv)\n        inv\n}\n",
+    "created" : 1434651286114.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3051370149",
+    "id" : "636AE7C5",
+    "lastKnownWriteTime" : 1434654089,
+    "path" : "C:/Users/aoverlack/CourseraWork/ProgrammingAssignment2/cachematrix.R",
+    "project_path" : "cachematrix.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

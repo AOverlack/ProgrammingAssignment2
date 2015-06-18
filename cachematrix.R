@@ -1,15 +1,35 @@
-## Put comments here that give an overall description of what your
-## functions do
 
-## Write a short comment describing this function
+## This function performs initial inversion calculation of a matrix and persistent value storage
+## for input data and returned value so that inversion calculation can be limited
+## to first input or change of input data only. Calculated value of inversion is retrieved if present.
+## It assumes that the input matrix is invertible. It must be run prior to executing
+## the next module "cacheSolve", to generate the store and retrieve functions in the list
 
-makeCacheMatrix <- function(x = matrix()) {
-
+makeCacheMatrix  <- function(x){
+        inv <- NULL
+        set <- function(y){
+                x<<-y
+                inv<<-NULL
+        }
+        get <- function() x
+        setinverse <- function(inverse) inv<<-inverse
+        getinverse <- function() inv
+        
+        list(set=set, get=get, setinverse=setinverse,getinverse=getinverse)
 }
 
+## This part of the function retrieves the stored value of the inverted matrix if stored previously
+## If the inverse matrix is already present, it returns it,
+## otherwise it calculates and stores it and then returns it.
 
-## Write a short comment describing this function
-
-cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+cacheSolve <- function(x) {
+        inv <- x$getinverse()
+        if(!is.null(inv)){
+                message("getting cached data")
+                return (inv)
+        }
+        data <- x$get()
+        inv <- solve(data)
+        x$setinverse(inv)
+        inv
 }
